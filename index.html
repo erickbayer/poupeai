@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance App V5</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>PoupeAI</h2>
+    <p>Inteligência para o seu dinheiro. Liberdade para a sua vida.</p>
+
+    <input id="email" placeholder="E-mail">
+    <input id="password" type="password" placeholder="Senha">
+
+    <button onclick="login()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
+<div class="sidebar">
+  <h2>Finance V5</h2>
+
+  <button onclick="show('dash')">Dashboard</button>
+  <button onclick="show('trans')">Transações</button>
+  <button onclick="show('cartao')">Cartão</button>
+  <button onclick="show('faturas')">Faturas</button>
+  <button onclick="logout()">Sair</button>
+</div>
+
+<div class="main">
+
+<!-- DASH -->
+<div id="dash" class="tab active">
+  <div class="cards">
+    <div class="card"><h4>Receitas</h4><h2 id="r">0</h2></div>
+    <div class="card"><h4>Despesas</h4><h2 id="d">0</h2></div>
+    <div class="card"><h4>Cartão</h4><h2 id="c">0</h2></div>
+    <div class="card"><h4>Saldo</h4><h2 id="s">0</h2></div>
+  </div>
+
+  <canvas id="chart"></canvas>
+</div>
+
+<!-- TRANS -->
+<div id="trans" class="tab">
+  <h2>Transações</h2>
+
+  <input id="desc" placeholder="Descrição">
+  <input id="val" type="number" placeholder="Valor">
+
+  <select id="type">
+    <option value="r">Receita</option>
+    <option value="d">Despesa</option>
+  </select>
+
+  <button onclick="add()">Adicionar</button>
+
+  <table>
+    <tbody id="list"></tbody>
+  </table>
+</div>
+
+<!-- CARTÃO -->
+<div id="cartao" class="tab">
+  <h2>Cartão</h2>
+
+  <input id="cdesc" placeholder="Compra">
+  <input id="cval" type="number" placeholder="Valor">
+
+  <select id="cparc">
+    <option>1</option>
+    <option>3</option>
+    <option>6</option>
+    <option>12</option>
+  </select>
+
+  <button onclick="addCard()">Adicionar</button>
+
+  <table>
+    <tbody id="clist"></tbody>
+  </table>
+</div>
+
+<!-- FATURAS -->
+<div id="faturas" class="tab">
+  <h2>Faturas futuras</h2>
+
+  <table>
+    <tbody id="fat"></tbody>
+  </table>
+</div>
+
+</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -292,6 +292,33 @@ onAuthStateChanged(auth, (user) => {
   }
   #hamburger {
     background: none; border: none; cursor: pointer;
+    color: var(--text); padding: 8px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 149;
+  }
+  #sidebar-overlay.open { display: block; }
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 200;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  #mobile-header .brand-title {
+    font-size: 16px; font-weight: 800; color: var(--accent-lt);
+  }
+  #hamburger {
+    background: none; border: none; cursor: pointer;
     color: var(--text); padding: 6px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
   }
@@ -307,6 +334,72 @@ onAuthStateChanged(auth, (user) => {
   #sidebar-overlay.open { display: block; }
 
   @media (max-width: 768px) {
+    #mobile-header { display: flex !important; }
+
+    #sidebar {
+      transform: translateX(-100%);
+      z-index: 150;
+    }
+    #sidebar.open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0,0,0,.4);
+    }
+
+    #main {
+      margin-left: 0 !important;
+      padding: 72px 14px 40px;
+    }
+
+    .cards {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .charts-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .chart-box.wide { grid-column: 1; }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-section {
+      padding: 14px;
+      overflow-x: auto;
+    }
+
+    table { min-width: 520px; }
+
+    .sub-tabs { gap: 3px; }
+    .sub-tab  { padding: 6px 10px; font-size: 12px; }
+
+    #rel-cards {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    #modal-edit > div {
+      margin: 16px !important;
+      padding: 20px 16px !important;
+      max-width: calc(100% - 32px) !important;
+    }
+
+    .actions { flex-wrap: wrap; }
+    .actions .btn { flex: 1 1 130px; justify-content: center; }
+
+    .card .val   { font-size: 19px; }
+    .card        { padding: 14px 16px; }
+    .page-header h2 { font-size: 17px; }
+    .page-header p  { font-size: 12px; }
+  }
+
+  @media (max-width: 380px) {
+    .cards          { grid-template-columns: 1fr; }
+    #rel-cards      { grid-template-columns: 1fr !important; }
+    .sub-tabs       { flex-wrap: wrap; }
+    .card .val      { font-size: 17px; }
+  }
     #mobile-header { display: flex; }
 
     #sidebar {
@@ -1230,18 +1323,24 @@ document.getElementById('modal-edit').addEventListener('click', function(e) {
 });
 // ── SIDEBAR MOBILE ───────────────────────────────────────────────────────────
 function toggleSidebar() {
-  const sidebar  = document.getElementById('sidebar');
-  const overlay  = document.getElementById('sidebar-overlay');
-  const isOpen   = sidebar.classList.contains('open');
-  if (isOpen) { closeSidebar(); } else {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    closeSidebar();
+  } else {
     sidebar.classList.add('open');
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 }
 function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
   document.body.style.overflow = '';
 }
 // ── AUTH ─────────────────────────────────────────────────────────────────────
@@ -1295,6 +1394,10 @@ async function initApp() {
   renderCatSelect('f-cat');
   renderCatSelect('p-cat');
   renderDashboard();
+  // Força re-render dos gráficos após layout estabilizar no mobile
+  if (window.innerWidth <= 768) {
+    setTimeout(() => renderDashboard(), 300);
+  }
 }
 
 // Inicia imediatamente com localStorage — sem esperar Firebase

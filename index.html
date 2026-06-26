@@ -139,7 +139,8 @@ onAuthStateChanged(auth, (user) => {
     flex-direction: column;
     position: fixed;
     top: 0; left: 0; bottom: 0;
-    z-index: 100;
+    z-index: 150;
+    transition: transform .25s ease;
   }
   .brand { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
   .brand h1 { font-size: 18px; font-weight: 800; color: var(--accent-lt); letter-spacing: -0.5px; }
@@ -410,6 +411,21 @@ onAuthStateChanged(auth, (user) => {
 
 <!-- Overlay para fechar sidebar no mobile -->
 <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<!-- Header mobile -->
+<div id="mobile-header">
+  <span class="brand-title">💰 FinTrack</span>
+  <button id="hamburger" onclick="toggleSidebar()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Overlay escuro ao abrir sidebar -->
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
 <aside id="sidebar">
   <div class="brand">
     <h1>💰 FinTrack</h1>
@@ -819,6 +835,8 @@ function showPage(id, el) {
   document.getElementById('page-' + id).classList.add('active');
   el.classList.add('active');
   renderPage(id);
+  if (window.innerWidth <= 768) closeSidebar();
+}
   // Fecha sidebar ao navegar no mobile
   if (window.innerWidth <= 768) closeSidebar();
 }
